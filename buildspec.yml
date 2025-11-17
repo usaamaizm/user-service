@@ -3,14 +3,28 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Installing dependencies..."
-      - yum install -y java-21-amazon-corretto-devel maven
+      - echo "Installing Amazon Corretto 21..."
+      # Install Corretto 21
+      - amazon-linux-extras install java-openjdk21 -y
+      # Alternative method if the above doesn't work:
+      # - yum install -y java-21-amazon-corretto-devel
+
+  pre_build:
+    commands:
+      - echo "Checking Java version..."
+      - java -version
+      - echo "Setting up JAVA_HOME..."
+      - export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-21
+      - export PATH=$JAVA_HOME/bin:$PATH
+      - echo "JAVA_HOME set to: $JAVA_HOME"
+      - echo "Final Java version:"
+      - java -version
 
   build:
     commands:
-      - echo "Building application..."
-      - java -version
-      - mvn clean package
+      - echo "Building with Maven..."
+      - mvn -version
+      - mvn clean package -Dmaven.compiler.source=21 -Dmaven.compiler.target=21
 
 artifacts:
   files:
