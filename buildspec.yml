@@ -1,11 +1,20 @@
-version: 0.2 
+version: 0.2
 
-phases: 
-  build: 
-    commands: 
-    - echo "building auth service..."
-    - mvn clean package
+phases:
+  install:
+    commands:
+      - echo "Installing Corretto 21..."
+      - sudo yum install -y java-21-amazon-corretto
 
-artifacts: 
+  build:
+    commands:
+      - echo "Setting JAVA_HOME to Corretto 21..."
+      - export JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto
+      - export PATH=$JAVA_HOME/bin:$PATH
+      - java -version
+      - echo "Building auth service..."
+      - mvn clean package
+
+artifacts:
   files:
     - target/*.jar
