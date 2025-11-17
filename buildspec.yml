@@ -1,24 +1,9 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo "Adding Corretto 21 yum repo (if not already present)..."
-      - sudo rpm --import https://yum.corretto.aws/corretto.key || true
-      - sudo curl -L https://yum.corretto.aws/corretto.repo -o /etc/yum.repos.d/corretto.repo || true
-      - echo "Installing Amazon Corretto 21..."
-      - sudo yum install -y java-21-amazon-corretto-devel
-
   build:
     commands:
-      - echo "Configuring JAVA_HOME for Corretto 21..."
-      # Try common Corretto 21 locations
-      - export JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto
-      - if [ ! -d "$JAVA_HOME" ]; then export JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto.x86_64; fi
-      - export PATH=$JAVA_HOME/bin:$PATH
-      - echo "JAVA_HOME is: $JAVA_HOME"
-      - $JAVA_HOME/bin/java -version
-      - echo "Building auth service with Maven (Java 21)..."
+      - echo "Building user service with Maven (Java 17)..."
       - mvn clean package
 
 artifacts:
