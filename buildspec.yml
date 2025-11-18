@@ -4,7 +4,6 @@ phases:
   install:
     commands:
       - echo "Installing Amazon Corretto 21..."
-      # Download and install Corretto 21 directly
       - wget https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.rpm
       - yum install -y amazon-corretto-21-x64-linux-jdk.rpm
       - alternatives --install /usr/bin/java java /usr/lib/jvm/java-21-amazon-corretto/bin/java 1
@@ -19,8 +18,12 @@ phases:
   build:
     commands:
       - echo "Building with Maven..."
-      - mvn clean package
+      - mvn -DskipTests clean package
+      - cp target/*.jar target/application.jar
+      - ls -R target
 
 artifacts:
   files:
-    - "target/*.jar"
+    - application.jar       
+  base-directory: target    
+  discard-paths: yes
